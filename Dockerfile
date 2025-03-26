@@ -9,7 +9,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 
 # Fix APT update issues & Install required packages, including PHP CLI
 RUN apt-get update --allow-releaseinfo-change && \
-    apt-get install -y software-properties-common curl unzip php-cli
+    apt-get install -y software-properties-common curl unzip php8.2-cli
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
