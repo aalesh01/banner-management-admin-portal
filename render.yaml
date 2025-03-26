@@ -3,7 +3,7 @@ services:
     name: codeigniter-app
     env: docker
     plan: free
-    repo: https://github.com/YOUR_GITHUB_USERNAME/YOUR_CODEIGNITER_REPO
+    repo: https://github.com/aalesh01/banner-management-admin-portal
     region: oregon
     branch: main
     dockerfilePath: ./Dockerfile
