@@ -1,8 +1,11 @@
 # Use official PHP-Apache image
 FROM php:8.2-apache
 
-# Enable mod_rewrite for CodeIgniter
-RUN a2enmod rewrite
+# Set Apache ServerName to prevent warnings
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Enable required Apache modules
+RUN a2enmod rewrite headers
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && \
@@ -12,7 +15,17 @@ RUN apt-get update && \
         unzip \
         curl \
         git \
-    && docker-php-ext-install pdo pdo_mysql mysqli zip \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        mysqli \
+        zip \
+        gd \
+        opcache \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,13 +45,19 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader --ignore-pl
 # Copy the rest of the application
 COPY . .
 
-# Set permissions
+# Set permissions (adjust paths according to your framework)
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/writable
+    && chmod -R 777 /var/www/html/writable \
+    && chmod +x /var/www/html/public/index.php
 
 # Configure Apache
-RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Enable production settings for PHP
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 EXPOSE 80
 
