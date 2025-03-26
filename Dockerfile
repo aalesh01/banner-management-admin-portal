@@ -1,6 +1,12 @@
 # Use official PHP-Apache image
 FROM php:8.2-apache
 
+# Install intl extension and dependencies
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    && docker-php-ext-install intl \
+    && apt-get clean
+
 # Set Apache ServerName to prevent warnings
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
