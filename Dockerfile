@@ -1,27 +1,25 @@
-# Use the official PHP image with Apache
+# Use official PHP-Apache image
 FROM php:8.2-apache
 
-# Enable required PHP extensions
+# Install necessary PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy project files to container
+# Copy project files
 COPY . /var/www/html
 
 # Set writable permissions for CodeIgniter
 RUN chmod -R 777 /var/www/html/writable
 
-# Install Composer
+# Install Composer and dependencies
 RUN apt-get update && apt-get install -y curl unzip && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer install --no-dev --optimize-autoloader
 
-# Install dependencies
-RUN composer install
-
-# Expose port 80
+# Expose Apache on port 80
 EXPOSE 80
 
-# Start Apache server
+# Start Apache
 CMD ["apache2-foreground"]
