@@ -7,8 +7,9 @@ RUN a2enmod rewrite
 # Install necessary PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Install required packages, including PHP CLI
-RUN apt-get update && apt-get install -y curl unzip php-cli
+# Fix APT update issues & Install required packages, including PHP CLI
+RUN apt-get update --allow-releaseinfo-change && \
+    apt-get install -y software-properties-common curl unzip php-cli
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
