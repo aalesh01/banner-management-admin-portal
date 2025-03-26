@@ -1,5 +1,5 @@
 (function() {
-    const API_URL = 'http://localhost:8080/banners'; 
+    const API_URL = '/banners'; 
     const DEFAULT_CONTAINER_ID = 'banner-container';
     
     const scriptElement = document.currentScript;
