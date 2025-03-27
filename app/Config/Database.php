@@ -21,7 +21,7 @@ class Database extends Config
             'username' => getenv('database.default.username') ?: 'root',
             'password' => getenv('database.default.password') ?: '',
             'database' => getenv('database.default.database') ?: '',
-            'DBDriver' => getenv('database.default.DBDriver') ?: 'MySQLi',
+            'DBDriver' => getenv('database.default.DBDriver') ?: 'Postgre',
             'DBPrefix' => '',
             'pConnect' => false,
             'DBDebug' => true,
