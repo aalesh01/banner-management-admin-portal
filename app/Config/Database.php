@@ -17,28 +17,25 @@ class Database extends Config
 
         $this->default = [
             'DSN' => '',
-            'hostname' => getenv('database.default.hostname') ?: 'localhost',
-            'username' => getenv('database.default.username') ?: 'root',
-            'password' => getenv('database.default.password') ?: '',
-            'database' => getenv('database.default.database') ?: '',
-            'DBDriver' => getenv('database.default.DBDriver') ?: 'Postgre',
+            'hostname' => 'dpg-cvh55vqqgecs73cnme2g-a.oregon-postgres.render.com',
+            'username' => 'banner_db_user',
+            'password' => 'PuFrm86wjQJk0lpdkhB0xX55iDvcol8B',
+            'database' => 'banner_db',
+            'DBDriver' => 'Postgre',
             'DBPrefix' => '',
             'pConnect' => false,
             'DBDebug' => true,
             'charset' => 'utf8',
-            'DBCollat' => 'utf8_general_ci',
             'swapPre' => '',
-            'encrypt' => [  // Changed from false to array
+            'encrypt' => [
                 'ssl' => [
-                    'verify_server_cert' => (ENVIRONMENT === 'production'),
-                    // For Render.com production:
-                    'ca' => '/etc/ssl/certs/ca-certificates.crt'
+                    'verify_server_cert' => true,
+                    'sslmode' => 'require',
+                    'sslrootcert' => '/etc/ssl/certs/ca-certificates.crt'
                 ],
             ],
-            'compress' => false,
-            'strictOn' => false,
-            'failover' => [],
-            'port' => getenv('database.default.port') ? (int) getenv('database.default.port') : 3306,
+            'port' => 5432,
+            'connect_timeout' => 5
         ];
 
         // Use test database if in testing environment
