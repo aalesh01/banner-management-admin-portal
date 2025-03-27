@@ -34,7 +34,7 @@ class Banners extends ResourceController
         }
     
         if (isset($data['is_active'])) {
-            $data['is_active'] = filter_var($data['is_active'], FILTER_VALIDATE_BOOLEAN);
+            $data['is_active'] = isset($data['is_active']) && filter_var($data['is_active'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
         }
     
         if (!$this->model->insert($data)) {
